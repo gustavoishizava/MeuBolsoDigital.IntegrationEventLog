@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9145213C-37D9-4895-9A35-8796D66B7D69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeuBolsoDigital.IntegrationEventLog", "src\MeuBolsoDigital.IntegrationEventLog\MeuBolsoDigital.IntegrationEventLog.csproj", "{F69D5D18-EA49-48E3-9A20-C419D656D920}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeuBolsoDigital.IntegrationEventLog.UnitTests", "src\MeuBolsoDigital.IntegrationEventLog.UnitTests\MeuBolsoDigital.IntegrationEventLog.UnitTests.csproj", "{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F69D5D18-EA49-48E3-9A20-C419D656D920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F69D5D18-EA49-48E3-9A20-C419D656D920}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F69D5D18-EA49-48E3-9A20-C419D656D920}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F69D5D18-EA49-48E3-9A20-C419D656D920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F69D5D18-EA49-48E3-9A20-C419D656D920} = {9145213C-37D9-4895-9A35-8796D66B7D69}
+		{7A263CB8-FB6A-4759-8E0D-DF4732DC73A3} = {9145213C-37D9-4895-9A35-8796D66B7D69}
+	EndGlobalSection
+EndGlobal
