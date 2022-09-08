@@ -7,7 +7,7 @@ namespace MeuBolsoDigital.IntegrationEventLog
         public DateTime? UpdatedAt { get; private set; }
         public string EventTypeName { get; private init; }
         public string Content { get; private init; }
-        public EventStateEnum State { get; private set; }
+        public EventState State { get; private set; }
 
         public IntegrationEventLogEntry(string eventTypeName, string content)
         {
@@ -22,19 +22,19 @@ namespace MeuBolsoDigital.IntegrationEventLog
             UpdatedAt = null;
             EventTypeName = eventTypeName;
             Content = content;
-            State = EventStateEnum.NotPublished;
+            State = EventState.NotPublished;
         }
 
-        private void SetState(EventStateEnum state)
+        private void SetState(EventState state)
         {
             UpdatedAt = DateTime.Now;
             State = state;
         }
 
-        public void SetStateToInProgress() => SetState(EventStateEnum.InProgress);
+        public void SetStateToInProgress() => SetState(EventState.InProgress);
 
-        public void SetStateToPublished() => SetState(EventStateEnum.Published);
+        public void SetStateToPublished() => SetState(EventState.Published);
 
-        public void SetStateToNotPublished() => SetState(EventStateEnum.NotPublished);
+        public void SetStateToNotPublished() => SetState(EventState.NotPublished);
     }
 }

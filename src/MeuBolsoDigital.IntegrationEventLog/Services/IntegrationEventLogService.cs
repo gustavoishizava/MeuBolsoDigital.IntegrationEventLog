@@ -14,7 +14,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.Services
 
         public async Task CreateEventAsync<T>(T @event, string eventTypeName) where T : class
         {
-            ArgumentNullException.ThrowIfNull(@event, nameof(@event));
+            ArgumentNullException.ThrowIfNull(@event);
 
             var content = JsonSerializer.Serialize(@event, new JsonSerializerOptions
             {
@@ -32,7 +32,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.Services
 
         public async Task SetEventToPublishedAsync(IntegrationEventLogEntry integrationEventLogEntry)
         {
-            ArgumentNullException.ThrowIfNull(integrationEventLogEntry, nameof(integrationEventLogEntry));
+            ArgumentNullException.ThrowIfNull(integrationEventLogEntry);
 
             integrationEventLogEntry.SetStateToPublished();
             await _repository.UpdateAsync(integrationEventLogEntry);

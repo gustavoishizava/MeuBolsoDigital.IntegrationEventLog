@@ -35,8 +35,10 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Extensions
             services.AddIntegrationEventLog<FakeRepository>();
 
             // Assert
-            Assert.True(services.Any(x => x.ServiceType == typeof(IIntegrationEventLogService)));
-            Assert.True(services.Any(x => x.ServiceType == typeof(IIntegrationEventLogRepository)));
+            var service = services.FirstOrDefault(x => x.ServiceType == typeof(IIntegrationEventLogService));
+            var repository = services.FirstOrDefault(x => x.ServiceType == typeof(IIntegrationEventLogRepository));
+            Assert.NotNull(service);
+            Assert.NotNull(repository);
         }
     }
 }

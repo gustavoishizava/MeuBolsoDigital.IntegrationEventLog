@@ -1,6 +1,6 @@
 namespace MeuBolsoDigital.IntegrationEventLog
 {
-    public enum EventStateEnum
+    public enum EventState
     {
         NotPublished = 0,
         InProgress = 1,

@@ -36,8 +36,8 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateEventAsync<FakeEvent>(null, "fakeEvent"));
 
             // Assert
-            Assert.Equal("event", exception.ParamName);
-            Assert.Equal("Value cannot be null. (Parameter 'event')", exception.Message);
+            Assert.Equal("@event", exception.ParamName);
+            Assert.Equal("Value cannot be null. (Parameter '@event')", exception.Message);
             repository.Verify(x => x.AddAsync(It.IsAny<IntegrationEventLogEntry>()), Times.Never);
         }
 
@@ -101,7 +101,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
             await _service.SetEventToPublishedAsync(integrationEventLogEntry);
 
             // Assert
-            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == EventStateEnum.Published)), Times.Once);
+            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == EventState.Published)), Times.Once);
         }
     }
 }

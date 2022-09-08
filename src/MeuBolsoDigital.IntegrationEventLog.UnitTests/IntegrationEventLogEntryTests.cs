@@ -42,7 +42,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
             Assert.Null(integrationEventLogEntry.UpdatedAt);
             Assert.Equal(eventTypeName, integrationEventLogEntry.EventTypeName);
             Assert.Equal(content, integrationEventLogEntry.Content);
-            Assert.Equal(EventStateEnum.NotPublished, integrationEventLogEntry.State);
+            Assert.Equal(EventState.NotPublished, integrationEventLogEntry.State);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
             integrationEventLogEntry.SetStateToInProgress();
 
             // Assert
-            Assert.Equal(EventStateEnum.InProgress, integrationEventLogEntry.State);
+            Assert.Equal(EventState.InProgress, integrationEventLogEntry.State);
             Assert.NotNull(integrationEventLogEntry.UpdatedAt);
         }
 
@@ -69,7 +69,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
             integrationEventLogEntry.SetStateToPublished();
 
             // Assert
-            Assert.Equal(EventStateEnum.Published, integrationEventLogEntry.State);
+            Assert.Equal(EventState.Published, integrationEventLogEntry.State);
             Assert.NotNull(integrationEventLogEntry.UpdatedAt);
         }
 
@@ -83,7 +83,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
             integrationEventLogEntry.SetStateToNotPublished();
 
             // Assert
-            Assert.Equal(EventStateEnum.NotPublished, integrationEventLogEntry.State);
+            Assert.Equal(EventState.NotPublished, integrationEventLogEntry.State);
             Assert.NotNull(integrationEventLogEntry.UpdatedAt);
         }
     }
