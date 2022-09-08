@@ -1,0 +1,81 @@
+name: $(majorMinorVersion).$(semanticVersion)
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  majorMinorVersion: 1.0
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    version: 6.0.x
+    performMultiLevelLookup: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Dotnet restore'
+  inputs:
+    command: 'restore'
+    feedsToUse: 'select'
+
+- task: SonarCloudPrepare@1
+  displayName: 'Sonar prepare'
+  inputs:
+    SonarCloud: 'Sonar Cloud'
+    organization: 'gustavoishizava'
+    scannerMode: 'MSBuild'
+    projectKey: 'gustavoishizava_MeuBolsoDigital.IntegrationEventLog'
+    projectName: 'MeuBolsoDigital.IntegrationEventLog'
+    extraProperties: |
+          sonar.exclusions=**/*.bin,**/obj/**,**/*.dll
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+
+- task: DotNetCoreCLI@2
+  displayName: 'Dotnet build'
+  inputs:
+    command: 'build'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Unit tests'
+  inputs:
+    command: 'test'
+    projects: '**/*.UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Sonar analyze'
+
+- task: SonarCloudPublish@1
+  displayName: 'Sonar publish'
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Dotnet NuGet pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/MeuBolsoDigital.IntegrationEventLog/*.csproj'
+    versioningScheme: 'byBuildNumber'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget Org'
