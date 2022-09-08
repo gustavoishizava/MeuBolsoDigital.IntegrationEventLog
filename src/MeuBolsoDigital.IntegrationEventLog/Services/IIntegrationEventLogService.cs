@@ -1,4 +1,4 @@
-namespace MeuBolsoDigital.IntegrationEventLog
+namespace MeuBolsoDigital.IntegrationEventLog.Services
 {
     public interface IIntegrationEventLogService
     {

@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MeuBolsoDigital.IntegrationEventLog.Repositories;
+using MeuBolsoDigital.IntegrationEventLog.Services;
 using Moq;
 using Moq.AutoMock;
 
-namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
+namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
 {
     public class IntegrationEventLogServiceTests
     {

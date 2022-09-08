@@ -1,6 +1,7 @@
 using System.Text.Json;
+using MeuBolsoDigital.IntegrationEventLog.Repositories;
 
-namespace MeuBolsoDigital.IntegrationEventLog
+namespace MeuBolsoDigital.IntegrationEventLog.Services
 {
     public class IntegrationEventLogService : IIntegrationEventLogService
     {
