@@ -25,6 +25,10 @@ namespace MeuBolsoDigital.IntegrationEventLog
             State = EventState.NotPublished;
         }
 
+        protected IntegrationEventLogEntry()
+        {
+        }
+
         private void SetState(EventState state)
         {
             UpdatedAt = DateTime.Now;
