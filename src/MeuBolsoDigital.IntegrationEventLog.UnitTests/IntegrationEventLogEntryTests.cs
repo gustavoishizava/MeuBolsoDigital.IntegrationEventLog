@@ -86,5 +86,19 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests
             Assert.Equal(EventState.NotPublished, integrationEventLogEntry.State);
             Assert.NotNull(integrationEventLogEntry.UpdatedAt);
         }
+
+        [Fact]
+        public void SetStateToPublishedFailed_ReturnCorrectState()
+        {
+            // Arrange
+            var integrationEventLogEntry = new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+            // Act
+            integrationEventLogEntry.SetStateToPublishedFailed();
+
+            // Assert
+            Assert.Equal(EventState.PublishedFailed, integrationEventLogEntry.State);
+            Assert.NotNull(integrationEventLogEntry.UpdatedAt);
+        }
     }
 }

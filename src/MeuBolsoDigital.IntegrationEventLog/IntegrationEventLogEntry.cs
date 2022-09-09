@@ -40,5 +40,7 @@ namespace MeuBolsoDigital.IntegrationEventLog
         public void SetStateToPublished() => SetState(EventState.Published);
 
         public void SetStateToNotPublished() => SetState(EventState.NotPublished);
+
+        public void SetStateToPublishedFailed() => SetState(EventState.PublishedFailed);
     }
 }
