@@ -25,7 +25,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.Services
             await _repository.AddAsync(integrationEventLogEntry);
         }
 
-        public async Task<int> ProcessEventsAsync(CancellationToken cancellationToken, Func<IntegrationEventLogEntry, Task<bool>> execute)
+        public async Task<int> ProcessEventsAsync(Func<IntegrationEventLogEntry, Task<bool>> execute, CancellationToken cancellationToken)
         {
             var count = 0;
             var @event = await _repository.FindNextToPublishAsync();

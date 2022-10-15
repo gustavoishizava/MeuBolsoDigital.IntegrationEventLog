@@ -83,10 +83,10 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
             repository.Setup(x => x.FindNextToPublishAsync()).ReturnsAsync((IntegrationEventLogEntry)null);
 
             // Act
-            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            var result = await _service.ProcessEventsAsync((@event) =>
             {
                 return Task.FromResult(true);
-            });
+            }, new CancellationToken());
 
             // Assert
             Assert.Equal(0, result);
@@ -108,10 +108,10 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
                     .ReturnsAsync((IntegrationEventLogEntry)null);
 
             // Act
-            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            var result = await _service.ProcessEventsAsync((@event) =>
             {
                 return Task.FromResult(executionResult);
-            });
+            }, new CancellationToken());
 
             // Assert
             Assert.Equal(1, result);
@@ -137,10 +137,10 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
                     .ReturnsAsync((IntegrationEventLogEntry)null);
 
             // Act
-            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            var result = await _service.ProcessEventsAsync((@event) =>
             {
                 return Task.FromResult(true);
-            });
+            }, new CancellationToken());
 
             // Assert
             Assert.Equal(7, result);
@@ -168,10 +168,10 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
                     .ReturnsAsync((IntegrationEventLogEntry)null);
 
             // Act
-            var result = await _service.ProcessEventsAsync(cancellationTokenSource.Token, (@event) =>
+            var result = await _service.ProcessEventsAsync((@event) =>
             {
                 return Task.FromResult(true);
-            });
+            }, cancellationTokenSource.Token);
 
             // Assert
             Assert.Equal(1, result);
