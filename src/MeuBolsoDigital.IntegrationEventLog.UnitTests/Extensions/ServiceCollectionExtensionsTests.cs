@@ -14,6 +14,11 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Extensions
                 throw new NotImplementedException();
             }
 
+            public Task<IntegrationEventLogEntry> FindNextToPublishAsync()
+            {
+                throw new NotImplementedException();
+            }
+
             public Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync()
             {
                 throw new NotImplementedException();

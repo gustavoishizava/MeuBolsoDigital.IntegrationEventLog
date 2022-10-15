@@ -1,3 +1,4 @@
+using System.Threading;
 using MeuBolsoDigital.IntegrationEventLog.Repositories;
 using MeuBolsoDigital.IntegrationEventLog.Services;
 using Moq;
@@ -102,6 +103,110 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
 
             // Assert
             repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == EventState.Published)), Times.Once);
+        }
+
+        [Fact]
+        public async Task ProcessEvents_NoHaveEvents_DoNothing()
+        {
+            // Arrange
+            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
+            repository.Setup(x => x.FindNextToPublishAsync()).ReturnsAsync((IntegrationEventLogEntry)null);
+
+            // Act
+            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            // Assert
+            Assert.Equal(0, result);
+            repository.Verify(x => x.FindNextToPublishAsync(), Times.Once);
+            repository.Verify(x => x.UpdateAsync(It.IsAny<IntegrationEventLogEntry>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task ProcessEvents_HaveOneEvent_ProcessAndUpdate(bool executionResult)
+        {
+            // Arrange
+            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
+            var @event = new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+            var state = executionResult ? EventState.Published : EventState.PublishedFailed;
+            repository.SetupSequence(x => x.FindNextToPublishAsync())
+                    .ReturnsAsync(@event)
+                    .ReturnsAsync((IntegrationEventLogEntry)null);
+
+            // Act
+            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            {
+                return Task.FromResult(executionResult);
+            });
+
+            // Assert
+            Assert.Equal(1, result);
+            repository.Verify(x => x.FindNextToPublishAsync(), Times.Exactly(2));
+            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == state)), Times.Once);
+        }
+
+        [Fact]
+        public async Task ProcessEvents_HaveManyEvents_ProcessAndUpdate()
+        {
+            // Arrange
+            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
+            var state = EventState.Published;
+
+            repository.SetupSequence(x => x.FindNextToPublishAsync())
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync((IntegrationEventLogEntry)null);
+
+            // Act
+            var result = await _service.ProcessEventsAsync(new CancellationToken(), (@event) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            // Assert
+            Assert.Equal(7, result);
+            repository.Verify(x => x.FindNextToPublishAsync(), Times.Exactly(8));
+            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == state)), Times.Exactly(7));
+        }
+
+        [Fact]
+        public async Task ProcessEvents_CancellationIsRequested_ProcessAndUpdateOneAndStop()
+        {
+            // Arrange
+            var cancellationTokenSource = new CancellationTokenSource(100);
+            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
+            var state = EventState.Published;
+
+            repository.SetupSequence(x => x.FindNextToPublishAsync())
+                    .ReturnsAsync(() =>
+                    {
+                        Task.Delay(200).Wait();
+                        return new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+                    })
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync(new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()))
+                    .ReturnsAsync((IntegrationEventLogEntry)null);
+
+            // Act
+            var result = await _service.ProcessEventsAsync(cancellationTokenSource.Token, (@event) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            // Assert
+            Assert.Equal(1, result);
+            repository.Verify(x => x.FindNextToPublishAsync(), Times.Exactly(1));
+            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == state)), Times.Exactly(1));
         }
     }
 }
