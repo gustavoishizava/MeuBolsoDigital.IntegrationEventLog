@@ -54,13 +54,5 @@ namespace MeuBolsoDigital.IntegrationEventLog.Services
         {
             return await _repository.RetrieveEventLogsPendingToPublishAsync();
         }
-
-        public async Task SetEventToPublishedAsync(IntegrationEventLogEntry integrationEventLogEntry)
-        {
-            ArgumentNullException.ThrowIfNull(integrationEventLogEntry);
-
-            integrationEventLogEntry.SetStateToPublished();
-            await _repository.UpdateAsync(integrationEventLogEntry);
-        }
     }
 }

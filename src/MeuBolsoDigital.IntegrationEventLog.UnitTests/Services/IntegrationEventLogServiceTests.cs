@@ -1,4 +1,3 @@
-using System.Threading;
 using MeuBolsoDigital.IntegrationEventLog.Repositories;
 using MeuBolsoDigital.IntegrationEventLog.Services;
 using Moq;
@@ -74,35 +73,6 @@ namespace MeuBolsoDigital.IntegrationEventLog.UnitTests.Services
             // Assert
             Assert.Single(result);
             repository.Verify(x => x.RetrieveEventLogsPendingToPublishAsync(), Times.Once);
-        }
-
-        [Fact]
-        public async Task SetEventToPublished_IntegrationEventLogNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
-
-            // Act
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.SetEventToPublishedAsync(null));
-
-            // Assert
-            Assert.Equal("integrationEventLogEntry", exception.ParamName);
-            Assert.Equal("Value cannot be null. (Parameter 'integrationEventLogEntry')", exception.Message);
-            repository.Verify(x => x.UpdateAsync(It.IsAny<IntegrationEventLogEntry>()), Times.Never);
-        }
-
-        [Fact]
-        public async Task SetEventToPublished_ReturnSuccess()
-        {
-            // Arrange
-            var integrationEventLogEntry = new IntegrationEventLogEntry(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            var repository = _autoMocker.GetMock<IIntegrationEventLogRepository>();
-
-            // Act
-            await _service.SetEventToPublishedAsync(integrationEventLogEntry);
-
-            // Assert
-            repository.Verify(x => x.UpdateAsync(It.Is<IntegrationEventLogEntry>(x => x.State == EventState.Published)), Times.Once);
         }
 
         [Fact]

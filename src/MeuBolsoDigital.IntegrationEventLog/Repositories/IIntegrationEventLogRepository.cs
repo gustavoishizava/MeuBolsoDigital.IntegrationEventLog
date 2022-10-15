@@ -6,5 +6,7 @@ namespace MeuBolsoDigital.IntegrationEventLog.Repositories
         Task UpdateAsync(IntegrationEventLogEntry integrationEventLogEntry);
         Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync();
         Task<IntegrationEventLogEntry> FindNextToPublishAsync();
+        Task ResetFailedAsync();
+        Task ResetInProgressAsync();
     }
 }
